@@ -13,18 +13,19 @@ namespace Reflex.Components
 
         private void Awake()
         {
-            var sceneContainer = gameObject.scene.GetSceneContainer();
+            var gameObjectScope = gameObject.GetComponentInParent<GameObjectScope>();
+            var container = gameObjectScope != null ? gameObjectScope.Container : gameObject.scene.GetSceneContainer();
 
             switch (_injectionStrategy)
             {
                 case InjectionStrategy.Single:
-                    GameObjectInjector.InjectSingle(gameObject, sceneContainer);
+                    GameObjectInjector.InjectSingle(gameObject, container);
                     break;
                 case InjectionStrategy.Object:
-                    GameObjectInjector.InjectObject(gameObject, sceneContainer);
+                    GameObjectInjector.InjectObject(gameObject, container);
                     break;
                 case InjectionStrategy.Recursive:
-                    GameObjectInjector.InjectRecursive(gameObject, sceneContainer);
+                    GameObjectInjector.InjectRecursive(gameObject, container);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(_injectionStrategy.ToString());
